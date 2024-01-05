@@ -121,7 +121,7 @@ void synth_ucontext(ThreadId tid, const vki_siginfo_t *si,
    sc->mc_gpregs.gp_lr = tst->arch.vex.guest_X30;
    sc->mc_gpregs.gp_sp = tst->arch.vex.guest_XSP;
    sc->mc_gpregs.gp_elr = tst->arch.vex.guest_PC;
-   sc->mc_gpregs.gp_spsr = 0; /* slack .. could do better */
+   sc->mc_gpregs.gp_spsr = LibVEX_GuestARM64_get_nzcv(&tst->arch.vex);
 }
 
 /* Extend the stack segment downwards if needed so as to ensure the

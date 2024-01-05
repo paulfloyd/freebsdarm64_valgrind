@@ -557,7 +557,7 @@ VgHashTable *ht_sigchld_ignore = NULL;
       /* Convert the value in uc_mcontext.regs[0] into a SysRes. */ \
       VG_(mk_SysRes_arm64_freebsd)( (uc)->uc_mcontext.mc_gpregs.gp_x[0], \
          (uc)->uc_mcontext.mc_gpregs.gp_x[1], \
-         (uc)->uc_mcontext.mc_gpregs.gp_spsr & ~VKI_PSR_C )
+         ((uc)->uc_mcontext.mc_gpregs.gp_spsr & VKI_PSR_C) != 0 ? True : False )
 #  define VG_UCONTEXT_TO_UnwindStartRegs(srP, uc)           \
       { (srP)->r_pc = (uc)->uc_mcontext.mc_gpregs.gp_elr;   \
         (srP)->r_sp = (uc)->uc_mcontext.mc_gpregs.gp_sp;    \

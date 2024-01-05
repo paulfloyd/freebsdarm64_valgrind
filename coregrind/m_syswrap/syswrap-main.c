@@ -1580,7 +1580,7 @@ void putSyscallStatusIntoGuestState ( /*IN*/ ThreadId tid,
    VG_TRACK( post_reg_write, Vg_CoreSysCall, tid,
             OFFSET_arm64_X1, sizeof(ULong) );
    VG_TRACK( post_reg_write, Vg_CoreSysCall, tid,
-            OFFSET_arm64_X0, sizeof(UWord) );
+            offsetof(VexGuestARM64State, guest_CC_DEP1), sizeof(ULong) );
 
 #elif defined(VGP_x86_darwin)
    VexGuestX86State* gst = (VexGuestX86State*)gst_vanilla;
