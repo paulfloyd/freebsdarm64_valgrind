@@ -460,7 +460,6 @@ check_PROGRAMS = \
 	badpoll \
 	badrw \
 	big_blocks_freed_list \
-	brk2 \
 	buflen_check \
 	bug155125 \
 	bug287260 \
@@ -552,7 +551,9 @@ check_PROGRAMS += long_namespace_xml
 endif
 
 if DWARF4
+if HAVE_SBRK
 check_PROGRAMS += dw4
+endif
 endif
 
 bug464969_d_demangle_SOURCES = bug464969_d_demangle.cpp
@@ -568,6 +569,10 @@ if GZ_ZLIB_GNU
 check_PROGRAMS += cdebug_zlib_gnu
 cdebug_zlib_gnu_SOURCES = cdebug.c
 cdebug_zlib_gnu_CFLAGS = $(AM_CFLAGS) -g -gz=zlib-gnu @FLAG_W_NO_UNINITIALIZED@
+endif
+
+if HAVE_SBRK
+check_PROGRAMS += brk2
 endif
 
 if HAVE_ALIGNED_CXX_ALLOC

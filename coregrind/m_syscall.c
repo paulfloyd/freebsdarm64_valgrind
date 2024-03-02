@@ -383,6 +383,14 @@ SysRes VG_(mk_SysRes_amd64_freebsd) ( ULong val, ULong val2, Bool err ) {
    return r;
 }
 
+SysRes VG_(mk_SysRes_arm64_freebsd) ( ULong val, ULong val2, Bool err ) {
+   SysRes r;
+   r._isError = err;
+   r._val = val;
+   r._val2 = val2;
+   return r;
+}
+
 /* Generic constructors. */
 SysRes VG_(mk_SysRes_Error) ( UWord err ) {
    SysRes r;
@@ -785,6 +793,33 @@ asm(
 ".previous\n"
 );
 
+#elif defined(VGP_arm64_freebsd)
+
+extern UWord do_syscall_WRK (
+   UWord syscall_no,
+   UWord a1, UWord a2, UWord a3,
+   UWord a4, UWord a5, UWord a6,
+   UWord a7, UWord a8,
+   UInt *flags,  UWord *rv2
+   );
+asm(
+   ".text\n"
+   ".globl do_syscall_WRK\n"
+   "do_syscall_WRK:\n"
+    "        ldr     x8, [sp, #8]     \n"  /* assume syscall success */
+    "        str     xzr, [x8]        \n"
+    "        ldr     x8, [sp, #0]     \n"  /* load syscall_no */
+    "        svc     0x0              \n"
+    "        bcc     1f               \n"  /* jump if success */
+    "        ldr     x9, [sp, #8]     \n"  /* syscall failed - set *errflag */
+    "        mov     x10, #1          \n"
+    "        str     x10, [x9]        \n"
+    "    1:  ldr     x9, [sp, #16]    \n"  /* save 2nd result word */
+    "        str     x1, [x9]         \n"
+    "        ret                      \n"  /* return 1st result word */
+   ".previous\n"
+   );
+
 #elif defined(VGP_x86_darwin)
 
 /* Incoming args (syscall number + up to 8 args) come in on the stack
@@ -1155,6 +1190,14 @@ SysRes VG_(do_syscall) ( UWord sysno, RegWord a1, RegWord a2, RegWord a3,
    val = do_syscall_WRK(sysno, a1, a2, a3, a4, a5,
                         a6, a7, a8, &err, &val2);
    return VG_(mk_SysRes_amd64_freebsd)( val, val2, (err & 1) != 0 ? True : False);
+
+#  elif defined(VGP_arm64_freebsd)
+   UWord val;
+   UWord val2 = 0;
+   UInt err = 0;
+   val = do_syscall_WRK(sysno, a1, a2, a3, a4, a5,
+                        a6, a7, a8, &err, &val2);
+   return VG_(mk_SysRes_arm64_freebsd)( val, val2, (err & 1) != 0 ? True : False);
 
 #  elif defined(VGP_ppc32_linux)
    ULong ret     = do_syscall_WRK(sysno,a1,a2,a3,a4,a5,a6);

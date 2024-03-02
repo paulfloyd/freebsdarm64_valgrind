@@ -516,7 +516,80 @@ static UInt local_sys_getpid ( void )
       :
       : "rax", "rcx");//, "r11" );
    return __res;
+
 }
+
+#elif defined(VGP_arm64_freebsd)
+
+// @todo PJF ARM64 try to get this to work with both clang and gcc
+#if defined(__clang__)
+static UInt local_sys_write_stderr ( const HChar* buf, Int n )
+{
+   volatile UInt res;
+   __asm__ volatile (
+      "mov  x0, #2\n\t"     /* stderr */
+      "mov  x1, %[buf]\n\t" /* buf */
+      "mov  x2, %[n]\n\t"   /* n */
+      "mov  x8, #"VG_STRINGIFY(__NR_write)"\n\t"
+      "svc  0x0\n"          /* write() */
+      "bcc  1f\n\t"
+      "mov  x0, -1\n"
+      "1: \n\t"
+      "mov  %[result], x0\n" /* res = x0 */
+      : [result] "=X" (res)
+      : [buf] "X" (buf), [n] "X" (n)
+      : "x0","x1","x2","x7", "cc"
+      );
+   return res;
+}
+
+static UInt local_sys_getpid ( void )
+{
+   UInt res;
+   __asm__ volatile (
+      "mov x8, #"VG_STRINGIFY(__NR_getpid)"\n\t"
+      "svc 0x0\n\t"             /* getpid() */
+      "mov %[result], x0\n\t"    /* set __res = x0 */
+      : [result] "=X" (res)
+      :
+      : "x8", "x0", "cc" );
+   return res;
+}
+#else
+static UInt local_sys_write_stderr ( const HChar* buf, Int n )
+{
+   volatile ULong block[2];
+   block[0] = (ULong)buf;
+   block[1] = (ULong)n;
+   __asm__ volatile (
+      "mov  x0, #2\n\t"        /* stderr */
+      "ldr  x1, [%0]\n\t"      /* buf */
+      "ldr  x2, [%0, #8]\n\t"  /* n */
+      "mov  x8, #"VG_STRINGIFY(__NR_write)"\n\t"
+                                            "svc  0x0\n"          /* write() */
+                                            "str  x0, [%0]\n\t"
+      :
+      : "r" (block)
+      : "x0","x1","x2","x7"
+      );
+   if (block[0] < 0)
+      block[0] = -1;
+   return (UInt)block[0];
+}
+
+static UInt local_sys_getpid ( void )
+{
+   ULong __res;
+   __asm__ volatile (
+      "mov  x8, #"VG_STRINGIFY(__NR_getpid)"\n"
+                                             "svc  0x0\n"      /* getpid() */
+                                             "mov  %0, x0\n"
+      : "=r" (__res)
+      :
+      : "x0", "x8" );
+   return (UInt)__res;
+}
+#endif
 
 #elif defined(VGP_mips32_linux) || defined(VGP_mips64_linux)
 

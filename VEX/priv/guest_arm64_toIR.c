@@ -7755,11 +7755,20 @@ Bool dis_ARM64_branch_etc(/*MB_OUT*/DisResult* dres, UInt insn,
    }
 
    /* ------------------ DC_CVAU ------------------ */
-   /* D5 0B 7B 001 Rt  dc cvau, rT
+   /* D5 0B 7A 001 Rt  dc cvac, rT
+      D5 0B 7B 001 Rt  dc cvau, rT
+      D5 0B 7C 001 Rt  dc cvap, rT
+      D5 0B 7D 001 Rt  dc cvadp, rT
       D5 0B 7E 001 Rt  dc civac, rT
    */
-   if (   (INSN(31,0) & 0xFFFFFFE0) == 0xD50B7B20
-       || (INSN(31,0) & 0xFFFFFFE0) == 0xD50B7E20) {
+   if (/*
+         Patch 2
+           (INSN(31,0) & 0xFFFFFFE0) == 0xD50B7A20
+       && (INSN(31,0) & 0xFFFFFFE0) == 0xD50B7B20
+       && (INSN(31,0) & 0xFFFFFFE0) == 0xD50B7C20
+       && (INSN(31,0) & 0xFFFFFFE0) == 0xD50B7D20
+       && (INSN(31,0) & 0xFFFFFFE0) == 0xD50B7E20*/
+           (INSN(31,0) & 0xFFFFF8E0) == 0xD50B7820) {
       /* Exactly the same scheme as for IC IVAU, except we observe the
          dMinLine size, and request an Ijk_FlushDCache instead of
          Ijk_InvalICache. */
@@ -14117,7 +14126,7 @@ Bool dis_AdvSIMD_vector_x_indexed_elem(/*MB_OUT*/DisResult* dres, UInt insn)
    /* 31    28    23   21 20 19 15     11   9 4
       0 Q U 01111 size L  M  m  opcode H  0 n d
       Decode fields are: u,size,opcode
-      M is really part of the mm register number.  Individual 
+      M is really part of the mm register number.  Individual
       cases need to inspect L and H though.
    */
 #  define INSN(_bMax,_bMin)  SLICE_UInt(insn, (_bMax), (_bMin))
@@ -14975,7 +14984,7 @@ Bool dis_AdvSIMD_fp_data_proc_1_source(/*MB_OUT*/DisResult* dres, UInt insn)
                          || opcode == BITS6(0,0,0,1,0,1)))
        || (ty == X00 && (opcode == BITS6(0,0,0,1,1,1) 
                          || opcode == BITS6(0,0,0,1,0,1)))
-       || (ty == X01 && (opcode == BITS6(0,0,0,1,1,1) 
+       || (ty == X01 && (opcode == BITS6(0,0,0,1,1,1)
                          || opcode == BITS6(0,0,0,1,0,0)))) {
       /* -------- 11,000100: FCVT s_h -------- */
       /* -------- 11,000101: FCVT d_h -------- */

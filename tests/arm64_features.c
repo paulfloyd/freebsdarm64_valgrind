@@ -5,6 +5,30 @@
 #include <sys/auxv.h>
 #endif
 
+#if defined(VGO_freebsd)
+#include <elf.h>
+#include <sys/exec.h>
+
+unsigned long getauxval(unsigned long type);
+
+unsigned long getauxval(unsigned long type)
+{
+   extern char** environ;
+   char** envp = environ;
+   Elf_Auxinfo *auxp;
+    while(*envp++ != NULL)
+        ;
+   for (auxp = (Elf_Auxinfo *)envp; auxp->a_type != AT_NULL; auxp++)
+   {
+      if (type == auxp->a_type)
+      {
+         return (unsigned long)auxp->a_un.a_val;
+      }
+   }
+}
+#endif
+
+
 // This file determines arm64 features a processor supports.
 // Arm processors do not have a x86-like cpuinfo instruction. Instead the
 // getauxval() syscall is used with capabilities parameters: getauxval(AT_HWCAP)
@@ -29,11 +53,24 @@ typedef int    Bool;
 
 // The processor's capabilities/features are returned by getauxval() as an
 // unsigned long with each bit representing a capability/feature.
+#ifndef HWCAP_FP
 #define HWCAP_FP            (1 << 0)
+#endif
+#ifndef HWCAP_ASIMD
 #define HWCAP_ASIMD         (1 << 1)
+#endif
+#ifndef HWCAP_EVTSTRM
 #define HWCAP_EVTSTRM       (1 << 2)
+#endif
+#ifndef HWCAP_AES
 #define HWCAP_AES           (1 << 3)
+#endif
+#ifndef HWCAP_PMULL
 #define HWCAP_PMULL         (1 << 4)
+#endif
+
+// @todo PJF conditional all these :-(
+
 #define HWCAP_SHA1          (1 << 5)
 #define HWCAP_SHA2          (1 << 6)
 #define HWCAP_CRC32         (1 << 7)
@@ -68,9 +105,15 @@ typedef int    Bool;
 #define HWCAP2_SVEPMULL     (1 << 3)
 #define HWCAP2_SVEBITPERM   (1 << 4)
 #define HWCAP2_SVESHA3      (1 << 5)
+#ifndef HWCAP2_SVESM4
 #define HWCAP2_SVESM4       (1 << 6)
+#endif
+#ifndef HWCAP2_FLAGM2
 #define HWCAP2_FLAGM2       (1 << 7)
+#endif
+#ifndef HWCAP2_FRINT
 #define HWCAP2_FRINT        (1 << 8)
+#endif
 
 unsigned long hwcaps[] = {
    HWCAP_FP,     HWCAP_ASIMD,  HWCAP_EVTSTRM, HWCAP_AES,     HWCAP_PMULL,
@@ -165,6 +208,7 @@ static Bool go(const char* feature_name)
 }
 
 #endif   // defined(VGA_arm64)
+
 
 
 //---------------------------------------------------------------------------

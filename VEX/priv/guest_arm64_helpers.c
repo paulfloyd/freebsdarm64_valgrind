@@ -587,6 +587,43 @@ ULong arm64g_calculate_flags_nzcv ( ULong cc_op, ULong cc_dep1,
    return res;
 }
 
+#if defined(VGO_freebsd)
+static void ________VVVVVVVV_arm64g_calculate_flags_nzcv_WRK_VVVVVVVV_______(void)
+{
+}
+#endif
+
+void LibVEX_GuestARM64_put_nzcv_c ( ULong new_carry_flag,
+                                  /*MOD*/VexGuestARM64State* vex_state )
+{
+   ULong nzcv = arm64g_calculate_flags_nzcv(
+      vex_state->guest_CC_OP,
+      vex_state->guest_CC_DEP1,
+      vex_state->guest_CC_DEP2,
+      vex_state->guest_CC_NDEP
+      );
+   if (new_carry_flag & 1) {
+      nzcv |= ARM64G_CC_MASK_C;
+   } else {
+      nzcv &= ~ARM64G_CC_MASK_C;
+   }
+    vex_state->guest_CC_OP   = ARM64G_CC_OP_COPY;
+    vex_state->guest_CC_DEP1 = nzcv;
+    vex_state->guest_CC_DEP2 = 0;
+    vex_state->guest_CC_NDEP = 0;
+}
+
+#if defined(VGO_freebsd)
+void _______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______ (void)
+{
+}
+
+Addr addr_arm64g_calculate_flag_n =  (Addr)arm64g_calculate_flag_n;
+Addr addr________VVVVVVVV_arm64g_calculate_flags_nzcv_WRK_VVVVVVVV_______ =
+   (Addr)________VVVVVVVV_arm64g_calculate_flags_nzcv_WRK_VVVVVVVV_______;
+#endif
+
+
 //ZZ 
 //ZZ /* CALLED FROM GENERATED CODE: CLEAN HELPER */
 //ZZ /* Calculate the QC flag from the arguments, in the lowest bit
@@ -1774,6 +1811,7 @@ IRExpr* guest_arm64_spechelper ( const HChar* function_name,
 //ZZ }
 //ZZ #endif
 
+/* non-zero zero carry v? */
 /* VISIBLE TO LIBVEX CLIENT */
 ULong LibVEX_GuestARM64_get_nzcv ( /*IN*/const VexGuestARM64State* vex_state )
 {
@@ -1812,6 +1850,7 @@ ULong LibVEX_GuestARM64_get_nzcv ( /*IN*/const VexGuestARM64State* vex_state )
    return nzcv;
 }
 
+/* floating point status resgister */
 /* VISIBLE TO LIBVEX CLIENT */
 ULong LibVEX_GuestARM64_get_fpsr ( const VexGuestARM64State* vex_state )
 {

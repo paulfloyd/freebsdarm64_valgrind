@@ -53,6 +53,8 @@
 #  include "vki-machine-types-x86-freebsd.h"
 #elif defined(VGA_amd64)
 #  include "vki-machine-types-amd64-freebsd.h"
+#elif defined(VGA_arm64)
+#  include "vki-machine-types-arm64-freebsd.h"
 #else
 #  error Unknown platform
 #endif
@@ -195,6 +197,8 @@ typedef __vki_fd_set    vki_fd_set;
 #  include "vki-x86-freebsd.h"
 #elif defined(VGA_amd64)
 #  include "vki-amd64-freebsd.h"
+#elif defined(VGA_arm64)
+#  include "vki-arm64-freebsd.h"
 #else
 #  error Unknown platform
 #endif
@@ -1241,12 +1245,12 @@ struct vki_mq_attr {
 #define  VKI_UCF_SWAPPED   1
 
 struct vki_ucontext {
-   vki_sigset_t      uc_sigmask;
+   vki_sigset_t         uc_sigmask;
    struct vki_mcontext  uc_mcontext;
-   struct vki_ucontext  *uc_link;
-   vki_stack_t    uc_stack;
-   int         uc_flags;
-   unsigned int      __spare__[4];
+   struct vki_ucontext* uc_link;
+   vki_stack_t          uc_stack;
+   int                  uc_flags;
+   unsigned int         __spare__[4];
 };
 
 //----------------------------------------------------------------------
@@ -1977,7 +1981,7 @@ typedef union vki_modspecific {
 #if defined(VGP_x86_freebsd)
    vki_int32_t longval;
    vki_uint32_t   u_longval;
-#elif defined(VGP_amd64_freebsd)
+#elif defined(VGP_amd64_freebsd) || defined(VGP_arm64_freebsd)
    vki_int64_t longval;
    vki_uint64_t   u_longval;
 #else

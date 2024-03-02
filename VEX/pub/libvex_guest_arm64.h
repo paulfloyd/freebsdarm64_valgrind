@@ -169,6 +169,12 @@ typedef
       /* Padding to make it have an 16-aligned size */
       /* UInt  pad_end_0; */
       /* ULong pad_end_1; */
+
+#if defined(VGP_arm64_freebsd)
+      /* Used for FreeBSD syscall dispatching. */
+      ULong guest_SC_CLASS;
+      ULong pad_end_1;
+#endif
    }
    VexGuestARM64State;
 
@@ -189,6 +195,17 @@ void LibVEX_GuestARM64_initialise ( /*OUT*/VexGuestARM64State* vex_state );
 extern
 ULong LibVEX_GuestARM64_get_nzcv ( /*IN*/
                                    const VexGuestARM64State* vex_state );
+
+extern
+void
+LibVEX_GuestARM64_put_nzcv_c ( ULong new_carry_flag,
+                              /*MOD*/VexGuestARM64State* vex_state );
+
+#if defined(VGO_freebsd)
+void _______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______ (void);
+extern Addr addr_arm64g_calculate_flag_n;
+extern Addr addr________VVVVVVVV_arm64g_calculate_flags_nzcv_WRK_VVVVVVVV_______;
+#endif
 
 /* Calculate the ARM64 FPSR state from the saved data, in the format
    36x0:qc:27x0 */

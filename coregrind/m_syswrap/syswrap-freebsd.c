@@ -278,6 +278,16 @@ static void run_a_thread_NORETURN ( Word tidW )
          : "n" (VgTs_Empty), "n" (__NR_thr_exit), "m" (tst->os_state.exitcode)
          : "rax", "rdi"
       );
+#elif defined(VGP_arm64_freebsd)
+      __asm__ volatile (
+         "str  %w1, %0\n"     /* set tst->status = VgTs_Empty (32-bit store) */
+         "mov  x8,  %2\n"     /* set %x8 = __NR_thr_exit */
+         "ldr  x0,  %3\n"     /* set %x0 = tst->os_state.exitcode */
+         "svc  0x00000000\n"  /* exit(tst->os_state.exitcode) */
+         : "=m" (tst->status)
+         : "r" (VgTs_Empty), "n" (__NR_thr_exit), "m" (tst->os_state.exitcode)
+         : "x0", "x8"
+      );
 #else
 # error Unknown platform
 #endif
@@ -631,11 +641,11 @@ PRE(sys_ptrace)
       break;
 
    case VKI_PTRACE_GETFPREGS:
-      PRE_MEM_WRITE("ptrace", ARG3, sizeof(struct vki_fpreg));
+      PRE_MEM_WRITE("ptrace", ARG3, sizeof(struct vki_fpregs));
       break;
 
    case VKI_PTRACE_SETFPREGS:
-      PRE_MEM_READ("ptrace", ARG3, sizeof(struct vki_fpreg));
+      PRE_MEM_READ("ptrace", ARG3, sizeof(struct vki_fpregs));
       break;
 
    case VKI_PTRACE_GETDBREGS:
@@ -717,7 +727,7 @@ POST(sys_ptrace)
 
    case VKI_PTRACE_GETFPREGS:
       if ((Word)RES != -1) {
-         POST_MEM_WRITE(ARG3, sizeof(struct vki_fpreg));
+         POST_MEM_WRITE(ARG3, sizeof(struct vki_fpregs));
       }
       break;
 
@@ -2719,8 +2729,9 @@ PRE(sys_lio_listio)
 // int lchmod(const char *path, mode_t mode);
 PRE(sys_lchmod)
 {
+   // @todo PJF ARM65 vki_mode_t to unsigned int
    PRINT("sys_lchmod ( %#" FMT_REGWORD "x(%s), %" FMT_REGWORD "u )", ARG1,(char *)ARG1,ARG2);
-   PRE_REG_READ2(int, "lchmod", const char *, path, vki_mode_t, mode);
+   PRE_REG_READ2(int, "lchmod", const char *, path, unsigned int, mode);
    PRE_MEM_RASCIIZ( "lchmod(path)", ARG1 );
 }
 
@@ -4827,17 +4838,18 @@ PRE(sys_sigqueue)
 // int kmq_open(_In_z_ const char *path, int flags, mode_t mode, _In_opt_ const struct mq_attr *attr);
 PRE(sys_kmq_open)
 {
+   // @todo PJF ARM64 vki_mode_t to unsigned int
    if (ARG2 & VKI_O_CREAT) {
       PRINT("sys_kmq_open( %#" FMT_REGWORD "x(%s), %" FMT_REGWORD "u, %hu, %#" FMT_REGWORD "x )",
             ARG1,(char *)ARG1,ARG2,(vki_mode_t)ARG3,ARG4);
       PRE_REG_READ4(long, "mq_open",
-                    const char *, name, int, oflag, vki_mode_t, mode,
+                    const char *, name, int, oflag, unsigned int, mode,
                     struct mq_attr *, attr);
    } else {
       PRINT("sys_kmq_open( %#" FMT_REGWORD "x(%s), %" FMT_REGWORD "u, %hu)",
             ARG1,(char *)ARG1,ARG2,(vki_mode_t)ARG3);
       PRE_REG_READ3(long, "mq_open",
-                    const char *, name, int, oflag, vki_mode_t, mode);
+                    const char *, name, int, oflag, unsigned int, mode);
    }
    PRE_MEM_RASCIIZ( "mq_open(name)", ARG1 );
    if (ARG2 & VKI_O_CREAT) {
@@ -5192,8 +5204,9 @@ POST(sys_thr_kill2)
 // int shm_open(const char *path, int flags, mode_t mode);
 PRE(sys_shm_open)
 {
+   // @todo PJF ARM64 unsigned int
    PRE_REG_READ3(int, "shm_open",
-                 const char *, path, int, flags, vki_mode_t, mode);
+                 const char *, path, int, flags, unsigned int, mode);
    if (ARG1 == VKI_SHM_ANON) {
       PRINT("sys_shm_open(%#" FMT_REGWORD "x(SHM_ANON), %" FMT_REGWORD "u, %hu)", ARG1, ARG2, (vki_mode_t)ARG3);
    } else {
@@ -5269,9 +5282,10 @@ PRE(sys_faccessat)
 // int fchmodat(int fd, const char *path, mode_t mode, int flag);
 PRE(sys_fchmodat)
 {
+   // @todo PJF ARM64 vki_mode_t to unsigned int
    PRINT("sys_fchmodat ( %" FMT_REGWORD "u, %#" FMT_REGWORD "x(%s), %" FMT_REGWORD "u )", ARG1,ARG2,(char*)ARG2,ARG3);
    PRE_REG_READ4(int, "fchmodat",
-                 int, fd, const char *, path, vki_mode_t, mode, int, flag);
+                 int, fd, const char *, path, unsigned int, mode, int, flag);
    PRE_MEM_RASCIIZ( "fchmodat(path)", ARG2 );
 }
 
@@ -5433,7 +5447,7 @@ PRE(sys_mkdirat)
    *flags |= SfMayBlock;
    PRINT("sys_mkdirat ( %" FMT_REGWORD "u, %#" FMT_REGWORD "x(%s), %" FMT_REGWORD "u )", ARG1,ARG2,(char*)ARG2,ARG3);
    PRE_REG_READ3(int, "mkdirat",
-                 int, fd, const char *, path, int, mode);
+                 int, fd, const char *, path, unsigned int, mode);
    PRE_MEM_RASCIIZ( "mkdirat(path)", ARG2 );
 }
 
@@ -5441,10 +5455,11 @@ PRE(sys_mkdirat)
 // int mkfifoat(int fd, const char *path, mode_t mode);
 PRE(sys_mkfifoat)
 {
+   // @todo PJF ARM64 vki_mode_t to unsigned int
    PRINT("sys_mkfifoat ( %" FMT_REGWORD "d, %#" FMT_REGWORD "x(%s), 0x%" FMT_REGWORD "x )",
          SARG1,ARG2,(HChar*)ARG2,ARG3 );
    PRE_REG_READ3(int, "mkfifoat",
-                 int, fd, const char *, path, vki_mode_t, mode);
+                 int, fd, const char *, path, unsigned int, mode);
    PRE_MEM_RASCIIZ( "mkfifoat(path)", ARG2 );
 }
 
@@ -5472,12 +5487,12 @@ PRE(sys_mknodat)
 // int openat(int fd, const char *path, int flags, ...);
 PRE(sys_openat)
 {
-
+   // @todo PJF arm64 vki_mode_t to unsigned int
    if (ARG3 & VKI_O_CREAT) {
       // 4-arg version
       PRINT("sys_openat ( %" FMT_REGWORD "u, %#" FMT_REGWORD "x(%s), %" FMT_REGWORD "u, %" FMT_REGWORD "u )",ARG1,ARG2,(char*)ARG2,ARG3,ARG4);
       PRE_REG_READ4(int, "openat",
-                    int, fd, const char *, path, int, flags, vki_mode_t, mode);
+                    int, fd, const char *, path, int, flags, unsigned int, mode);
    } else {
       // 3-arg version
       PRINT("sys_openat ( %" FMT_REGWORD "u, %#" FMT_REGWORD "x(%s), %" FMT_REGWORD "u )",ARG1,ARG2,(char*)ARG2,ARG3);
@@ -6715,8 +6730,11 @@ POST(sys___sysctlbyname)
 //               _In_z_ const char *name);
 PRE(sys_shm_open2)
 {
+   // @todo PJF ARM64 I had to change vki_mode_t mode to unsigned int because
+   // otherwise there is an assert in get_otrack_shadow_offset_wrk (mc_machine.c:1125)
+   // because it doesn't handle 2 byte offsets
    PRE_REG_READ5(int, "shm_open2",
-                 const char *, path, int, flags, vki_mode_t, mode, int, shmflags, const char*, name);
+                 const char *, path, int, flags, unsigned int, mode, int, shmflags, const char*, name);
    if (ARG1 == VKI_SHM_ANON) {
       PRINT("sys_shm_open2(%#" FMT_REGWORD "x(SHM_ANON), %" FMT_REGWORD "u, %hu, %d, %#" FMT_REGWORD "x(%s))",
             ARG1, ARG2, (vki_mode_t)ARG3, (Int)ARG4, ARG5, (HChar*)ARG5);

@@ -3934,14 +3934,17 @@ static char* maybe_merge_procmap_stack(char* p,  struct vki_kinfo_vmentry *kve, 
 #if defined(VGP_amd64_freebsd)
    // I think that this is the stacksize rlimit
    // I could use sysctl kern.maxssiz for this
-   if ( *pEndPlusOne + kern_sgrowsiz - kve->kve_start == 512ULL*1024ULL*1024ULL) {
-      return p;
-   }
 #elif defined(VGP_x86_freebsd)
    // sysctl kern.maxssiz OK for x86 on x86 but not x86 on amd64
    if ( *pEndPlusOne + kern_sgrowsiz - kve->kve_start == 64ULL*1024ULL*1024ULL) {
       return p;
    }
+#elif defined(VGP_arm64_freebsd)
+   if ( *pEndPlusOne + kern_sgrowsiz - kve->kve_start == 1024ULL*1024ULL*1024ULL) {
+      return p;
+   }
+#else
+#    error Unknown platform
 #endif
 
    while (kve_next->kve_protection & VKI_KVME_PROT_READ &&

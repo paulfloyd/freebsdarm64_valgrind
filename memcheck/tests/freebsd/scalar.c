@@ -620,6 +620,8 @@ int main(void)
 
    GO(SYS_sysarch, "2s 0m");
    SY(SYS_sysarch, x0+AMD64_SET_FSBASE, x0); FAIL;
+#elif defined(VGP_arm64_freebsd)
+// @todo PJF
 #else
 #error "freebsd platform not defined"
 #endif

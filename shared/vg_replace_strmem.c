@@ -1133,7 +1133,7 @@ static inline void my_exit ( int x )
 
 /* See https://bugs.kde.org/show_bug.cgi?id=402833
    why we disable the overlap check on x86_64.  */
-#if defined(VGP_amd64_linux)
+#if defined(VGP_amd64_linux) || defined(VGP_arm64_freebsd)
  #define MEMCPY(soname, fnname) \
    MEMMOVE_OR_MEMCPY(20180, soname, fnname, 0)
 #else
@@ -1163,6 +1163,7 @@ static inline void my_exit ( int x )
  MEMCPY(NONE, ZuintelZufastZumemcpy)
 
 #elif defined(VGO_freebsd)
+
  MEMCPY(VG_Z_LIBC_SONAME,  memcpy)
  MEMCPY(VG_Z_LD_ELF_SO_1, memcpy)
  MEMCPY(VG_Z_LD_ELF32_SO_1, memcpy)
