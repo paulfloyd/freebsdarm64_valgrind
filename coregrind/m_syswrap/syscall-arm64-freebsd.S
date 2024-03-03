@@ -70,7 +70,7 @@
               const vki_sigset_t *postmask,  // x3
               Int nsigwords)                 // x4
 */
-/* from vki-arm64-linux.h */
+/* from vki-arm64-freebsd.h */
 #define VKI_SIG_SETMASK 3
 
 .globl ML_(do_syscall_for_client_WRK)
@@ -96,17 +96,17 @@ ML_(do_syscall_for_client_WRK):
    mov x3, x4 /* nsigwords */
    svc 0x00000000
 
-   ldr x5, [sp, #8] /* saved x1 == guest_state */
+   ldr x9, [sp, #8] /* saved x1 == guest_state */
 
    ldr x8, [sp, #0] /* saved x0 == syscall# */
-   ldr x0, [x5, #OFFSET_arm64_X0]
-   ldr x1, [x5, #OFFSET_arm64_X1]
-   ldr x2, [x5, #OFFSET_arm64_X2]
-   ldr x3, [x5, #OFFSET_arm64_X3]
-   ldr x4, [x5, #OFFSET_arm64_X4]
-   ldr x6, [x5, #OFFSET_arm64_X6]
-   ldr x7, [x5, #OFFSET_arm64_X7]
-   ldr x5, [x5, #OFFSET_arm64_X5]
+   ldr x0, [x9, #OFFSET_arm64_X0]
+   ldr x1, [x9, #OFFSET_arm64_X1]
+   ldr x2, [x9, #OFFSET_arm64_X2]
+   ldr x3, [x9, #OFFSET_arm64_X3]
+   ldr x4, [x9, #OFFSET_arm64_X4]
+   ldr x5, [x9, #OFFSET_arm64_X5]
+   ldr x6, [x9, #OFFSET_arm64_X6]
+   ldr x7, [x9, #OFFSET_arm64_X7]
 
 2: svc 0x00000000
 3:

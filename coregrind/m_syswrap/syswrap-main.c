@@ -3412,6 +3412,13 @@ VG_(fixup_guest_state_after_syscall_interrupted)( ThreadId tid,
         else
            LibVEX_GuestAMD64_put_rflag_c(0, &th_regs->vex);
       }
+#elif defined(VGP_arm64_freebsd)
+      if (!(sci->flags & SfNoWriteResult)) {
+         if (sr_isError(sres))
+            LibVEX_GuestARM64_put_nzcv_c(1, &th_regs->vex);
+         else
+            LibVEX_GuestARM64_put_nzcv_c(0, &th_regs->vex);
+      }
 #endif
       if (VG_(clo_trace_signals))
          VG_(message)( Vg_DebugMsg,

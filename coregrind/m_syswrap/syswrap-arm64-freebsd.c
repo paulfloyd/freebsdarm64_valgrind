@@ -1,6 +1,6 @@
 
 /*--------------------------------------------------------------------*/
-/*--- Platform-specific syscalls stuff.    syswrap-amd64-freebsd.c ---*/
+/*--- Platform-specific syscalls stuff.    syswrap-arm64-freebsd.c ---*/
 /*--------------------------------------------------------------------*/
 
 /*
@@ -133,29 +133,13 @@ void VG_(cleanup_thread) ( ThreadArchState *arch )
 // int sysarch(int number, void *args);
 PRE(sys_sysarch)
 {
-   /*
-   ThreadState *tst;
-   void **p;
-   */
-
    PRINT("sys_sysarch ( %" FMT_REGWORD "u, %#" FMT_REGWORD "x )", ARG1, ARG2);
    PRE_REG_READ2(int, "sysarch", int, number, void *, args);
-   // @todo PJF ARM64
-/*
-#define ARM_SYNC_ICACHE         0
-#define ARM_DRAIN_WRITEBUF      1
-#define ARM_SET_TP              2
-#define ARM_GET_TP              3
-#define ARM_GET_VFPSTATE        4
-*/
+   // returns ENOTSUP on arm64
 }
 
 POST(sys_sysarch)
 {
-   switch (ARG1) {
-   default:
-      break;
-   }
 }
 
 // freebsd6_pread 173
