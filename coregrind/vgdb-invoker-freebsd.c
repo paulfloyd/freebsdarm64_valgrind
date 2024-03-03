@@ -521,8 +521,6 @@ Bool invoker_invoke_gdbserver (pid_t pid)
       reg_mod.r_rbp = sp; // bp set to sp
       reg_mod.r_rsp = sp;
       reg_mod.r_rip = shared32->invoke_gdbserver;
-
-      I_die_here : not x86 or amd64 in x86/amd64 section/
 #endif
 
 #elif defined(VGA_arm64)
