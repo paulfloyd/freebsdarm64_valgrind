@@ -3290,15 +3290,10 @@ VG_(fixup_guest_state_after_syscall_interrupted)( ThreadId tid,
 #elif defined (VGA_arm64)
 
      vg_assert((Addr)_______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______ >
-               (Addr)LibVEX_GuestARM64_put_nzcv_c );
+               (Addr)addr_arm64g_calculate_flag_n );
 
-     vg_assert(addr________VVVVVVVV_arm64g_calculate_flags_nzcv_WRK_VVVVVVVV_______ >
-               addr_arm64g_calculate_flag_n);
-
-     if ((ip >= (Addr)LibVEX_GuestARM64_put_nzcv_c &&
-          ip <  (Addr)_______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______) ||
-         (ip >= addr_arm64g_calculate_flag_n &&
-          ip < addr________VVVVVVVV_arm64g_calculate_flags_nzcv_WRK_VVVVVVVV_______))
+     if (ip >= addr_arm64g_calculate_flag_n &&
+          ip < addr_______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______)
 
 #endif
      {

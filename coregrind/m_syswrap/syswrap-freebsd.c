@@ -641,11 +641,11 @@ PRE(sys_ptrace)
       break;
 
    case VKI_PTRACE_GETFPREGS:
-      PRE_MEM_WRITE("ptrace", ARG3, sizeof(struct vki_fpreg));
+      PRE_MEM_WRITE("ptrace", ARG3, sizeof(struct vki_fpregs));
       break;
 
    case VKI_PTRACE_SETFPREGS:
-      PRE_MEM_READ("ptrace", ARG3, sizeof(struct vki_fpreg));
+      PRE_MEM_READ("ptrace", ARG3, sizeof(struct vki_fpregs));
       break;
 
    case VKI_PTRACE_GETDBREGS:
@@ -727,7 +727,7 @@ POST(sys_ptrace)
 
    case VKI_PTRACE_GETFPREGS:
       if ((Word)RES != -1) {
-         POST_MEM_WRITE(ARG3, sizeof(struct vki_fpreg));
+         POST_MEM_WRITE(ARG3, sizeof(struct vki_fpregs));
       }
       break;
 
@@ -7182,7 +7182,11 @@ const SyscallTableEntry ML_(syscall_table)[] = {
    // 4.3 lstat                                            40
    GENXY(__NR_dup,              sys_dup),               // 41
 
+#if defined(VGP_arm64_freebsd)
+   GENX_(__NR_freebsd10_pipe,   sys_ni_syscall),        // 42
+#else
    BSDXY(__NR_freebsd10_pipe,   sys_pipe),              // 42
+#endif
    GENX_(__NR_getegid,          sys_getegid),           // 43
 
    GENX_(__NR_profil,           sys_ni_syscall),        // 44

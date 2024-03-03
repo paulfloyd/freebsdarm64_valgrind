@@ -196,6 +196,7 @@ int main(void)
    GO(SYS_dup, "1s 0m");
    SY(SYS_dup, x0-1); FAIL;
 
+#if !defined(VGP_arm64_freebsd)
    /* freebsd10_pipe              42 */
 #if (FREEBSD_VERS >= FREEBSD_11)
    GO(SYS_freebsd10_pipe, "0s 0m");
@@ -203,6 +204,7 @@ int main(void)
 #else
    GO(SYS_pipe, "0s 0m");
    SY(SYS_pipe, x0); SUCC;
+#endif
 #endif
 
    /* getegid                     43 */

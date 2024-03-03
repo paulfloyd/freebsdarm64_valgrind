@@ -587,12 +587,6 @@ ULong arm64g_calculate_flags_nzcv ( ULong cc_op, ULong cc_dep1,
    return res;
 }
 
-#if defined(VGO_freebsd)
-static void ________VVVVVVVV_arm64g_calculate_flags_nzcv_WRK_VVVVVVVV_______(void)
-{
-}
-#endif
-
 void LibVEX_GuestARM64_put_nzcv_c ( ULong new_carry_flag,
                                   /*MOD*/VexGuestARM64State* vex_state )
 {
@@ -618,9 +612,9 @@ void _______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______ (void)
 {
 }
 
-Addr addr_arm64g_calculate_flag_n =  (Addr)arm64g_calculate_flag_n;
-Addr addr________VVVVVVVV_arm64g_calculate_flags_nzcv_WRK_VVVVVVVV_______ =
-   (Addr)________VVVVVVVV_arm64g_calculate_flags_nzcv_WRK_VVVVVVVV_______;
+Addr addr_arm64g_calculate_flag_n =  (Addr)arm64g_calculate_flag_c;
+Addr addr_______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______ =
+   (Addr)_______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______;
 #endif
 
 

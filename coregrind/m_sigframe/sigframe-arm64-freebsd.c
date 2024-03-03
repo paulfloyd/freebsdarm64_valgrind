@@ -76,6 +76,8 @@ struct vg_sigframe {
 
 struct sigframe {
    // amd64 has retaddr, for arm64 it is in the link register
+   // I don't think that this serves any purpose
+   Addr                  retaddr;
    Addr                  phandler; // ??
    struct vki_ucontext   uContext;
    vki_siginfo_t         sigInfo;
@@ -83,9 +85,17 @@ struct sigframe {
    struct vg_sigframe    vg;
 };
 
-static void synth_ucontext( ThreadId tid, const vki_siginfo_t *si,
-                            UWord trapno, UWord err, const vki_sigset_t *set, 
-                            struct vki_ucontext *uc) 
+/*------------------------------------------------------------*/
+/*--- Creating signal frames                               ---*/
+/*------------------------------------------------------------*/
+
+/* Create a plausible-looking sigcontext from the thread's
+   Vex guest state.
+*/
+static
+void synth_ucontext(ThreadId tid, const vki_siginfo_t *si,
+                    UWord trapno, UWord err, const vki_sigset_t *set,
+                    struct vki_ucontext *uc)
 {
 
    ThreadState *tst = VG_(get_ThreadState)(tid);
@@ -205,6 +215,8 @@ static Addr build_sigframe(ThreadState *tst,
    VG_TRACK(pre_mem_write, Vg_CoreSignal, tst->tid, "signal handler frame",
             sp, offsetof(struct sigframe, vg));
 
+   frame->retaddr = (Addr)&VG_(arm64_freebsd_SUBST_FOR_sigreturn);
+
    // on amd64 these are in the ucontext
    trapno = 0;
    err = 0;
@@ -255,6 +267,18 @@ void VG_(sigframe_create)( ThreadId tid,
 
    tst->arch.vex.guest_X30
           = (Addr)&VG_(arm64_freebsd_SUBST_FOR_sigreturn);
+
+   /* And tell the tool that these registers have been written. */
+   VG_TRACK(post_reg_write, Vg_CoreSignal, tst->tid,
+             offsetof(VexGuestARM64State,guest_PC), sizeof(UWord));
+   VG_TRACK(post_reg_write, Vg_CoreSignal, tst->tid,
+             offsetof(VexGuestARM64State,guest_X0), sizeof(UWord));
+   VG_TRACK(post_reg_write, Vg_CoreSignal, tst->tid,
+             offsetof(VexGuestARM64State,guest_X1), sizeof(UWord));
+   VG_TRACK(post_reg_write, Vg_CoreSignal, tst->tid,
+             offsetof(VexGuestARM64State,guest_X2), sizeof(UWord));
+   VG_TRACK(post_reg_write, Vg_CoreSignal, tst->tid,
+             offsetof(VexGuestARM64State,guest_X30), sizeof(UWord));
 }
 
 /*------------------------------------------------------------*/
@@ -307,8 +331,8 @@ void restore_sigcontext( ThreadState* tst,
 }
 
 static
-SizeT restore_sigframe ( ThreadState *tst,
-                    struct sigframe *frame, Int *sigNo )
+SizeT restore_sigframe(ThreadState *tst,
+                       struct sigframe *frame, Int *sigNo )
 {
    if (restore_vg_sigframe(tst, &frame->vg, sigNo)) {
       restore_sigcontext(tst, &frame->uContext.uc_mcontext);
@@ -317,7 +341,6 @@ SizeT restore_sigframe ( ThreadState *tst,
    return sizeof(*frame);
 }
 
-/* EXPORTED */
 void VG_(sigframe_destroy)( ThreadId tid )
 {
    vg_assert(VG_(is_valid_tid)(tid));

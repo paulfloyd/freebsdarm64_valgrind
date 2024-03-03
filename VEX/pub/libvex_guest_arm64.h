@@ -204,7 +204,7 @@ LibVEX_GuestARM64_put_nzcv_c ( ULong new_carry_flag,
 #if defined(VGO_freebsd)
 void _______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______ (void);
 extern Addr addr_arm64g_calculate_flag_n;
-extern Addr addr________VVVVVVVV_arm64g_calculate_flags_nzcv_WRK_VVVVVVVV_______;
+extern Addr addr_______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______;
 #endif
 
 /* Calculate the ARM64 FPSR state from the saved data, in the format

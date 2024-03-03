@@ -3332,7 +3332,8 @@ PRE(sys_chmod)
    FUSE_COMPATIBLE_MAY_BLOCK();
    PRINT("sys_chmod ( %#" FMT_REGWORD "x(%s), %" FMT_REGWORD "u )", ARG1,
          (HChar*)(Addr)ARG1, ARG2);
-   PRE_REG_READ2(long, "chmod", const char *, path, vki_mode_t, mode);
+   // @todo PJF vki_mode_t to unsigned int
+   PRE_REG_READ2(long, "chmod", const char *, path, unsigned int, mode);
    PRE_MEM_RASCIIZ( "chmod(path)", ARG1 );
 }
 
@@ -3428,7 +3429,8 @@ PRE(sys_fchmod)
 {
    FUSE_COMPATIBLE_MAY_BLOCK();
    PRINT("sys_fchmod ( %" FMT_REGWORD "u, %" FMT_REGWORD "u )", ARG1, ARG2);
-   PRE_REG_READ2(long, "fchmod", unsigned int, fildes, vki_mode_t, mode);
+   // @todo PJF vki_mode_t to unsigned int
+   PRE_REG_READ2(long, "fchmod", unsigned int, fildes, unsigned int, mode);
 }
 
 #if !defined(VGP_nanomips_linux) && !defined (VGO_freebsd)

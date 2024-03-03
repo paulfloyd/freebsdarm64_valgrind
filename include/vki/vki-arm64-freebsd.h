@@ -133,7 +133,6 @@ struct vki_fpregs {
 // On Linux the equivalent of the above is smaller, without the fp_flags annd padding
 typedef struct vki_fpregs vki_elf_fpregset_t;
 
-
 struct vki_mcontext {
         struct vki_gpregs mc_gpregs;
         struct vki_fpregs mc_fpregs;
