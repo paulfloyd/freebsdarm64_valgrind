@@ -474,7 +474,7 @@ static void fill_mcontext(ThreadState *tst, struct vki_mcontext *sc)
    sc->mc_gpregs.gp_lr    = tst->arch.vex.guest_X30;
 
    sc->mc_gpregs.gp_elr = tst->arch.vex.guest_PC;
-   sc->mc_gpregs.gp_spsr = LibVEX_GuestARM64_get_fpsr(&tst->arch.vex);
+   sc->mc_gpregs.gp_spsr = LibVEX_GuestARM64_get_nzcv(&tst->arch.vex);
 
    /*
    sc->len = sizeof(*sc);
