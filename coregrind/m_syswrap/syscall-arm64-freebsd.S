@@ -122,7 +122,12 @@ ML_(do_syscall_for_client_WRK):
    /* save carry flag to VEX */
    mov x0, x4       /* arg1 = new flag */
    ldr x1, [sp, #8] /* arg2 = vex state */
+   mov x10, 1
+   str x20, [x1, #OFFSET_arm64_SETC]
    bl LibVEX_GuestARM64_put_nzcv_c
+   ldr x1, [sp, #8] /* arg2 = vex state */
+   mov x20, 0
+   str x20, [x1, #OFFSET_arm64_SETC]
 
 4:
    mov x8, #__NR_sigprocmask

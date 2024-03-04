@@ -607,17 +607,6 @@ void LibVEX_GuestARM64_put_nzcv_c ( ULong new_carry_flag,
    vex_state->guest_CC_NDEP = 0;
 }
 
-#if defined(VGO_freebsd)
-void _______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______ (void)
-{
-}
-
-Addr addr_arm64g_calculate_flag_n =  (Addr)arm64g_calculate_flag_c;
-Addr addr_______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______ =
-   (Addr)_______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______;
-#endif
-
-
 //ZZ 
 //ZZ /* CALLED FROM GENERATED CODE: CLEAN HELPER */
 //ZZ /* Calculate the QC flag from the arguments, in the lowest bit

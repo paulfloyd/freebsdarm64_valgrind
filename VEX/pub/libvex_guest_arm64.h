@@ -41,7 +41,7 @@ typedef
       /* Event check fail addr and counter. */
       /* 0 */  ULong host_EvC_FAILADDR;
       /* 8 */  UInt  host_EvC_COUNTER;
-      /* 12 */ UInt  pad0;
+      /* 12 */ UInt  pad1;
       /* 16 */
       ULong guest_X0;
       ULong guest_X1;
@@ -166,15 +166,14 @@ typedef
       ULong guest_LLSC_DATA_LO64; // Original value at _ADDR+0.
       ULong guest_LLSC_DATA_HI64; // Original value at _ADDR+8.
 
+      /* Used for FreeBSD syscall dispatching. */
+      ULong guest_SC_CLASS;
+      UInt guest_SETC;
+      UInt pad2;
       /* Padding to make it have an 16-aligned size */
       /* UInt  pad_end_0; */
       /* ULong pad_end_1; */
 
-#if defined(VGP_arm64_freebsd)
-      /* Used for FreeBSD syscall dispatching. */
-      ULong guest_SC_CLASS;
-      ULong pad_end_1;
-#endif
    }
    VexGuestARM64State;
 
@@ -200,12 +199,6 @@ extern
 void
 LibVEX_GuestARM64_put_nzcv_c ( ULong new_carry_flag,
                               /*MOD*/VexGuestARM64State* vex_state );
-
-#if defined(VGO_freebsd)
-void _______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______ (void);
-extern Addr addr_arm64g_calculate_flag_n;
-extern Addr addr_______VVVVVVVV_after_LibVEX_GuestARM64_put_nzcv_c_VVVVVVVV_______;
-#endif
 
 /* Calculate the ARM64 FPSR state from the saved data, in the format
    36x0:qc:27x0 */
