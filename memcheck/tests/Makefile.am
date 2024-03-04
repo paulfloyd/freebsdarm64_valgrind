@@ -311,6 +311,7 @@ EXTRA_DIST = \
 	origin6-fp.stderr.exp-glibc25-amd64 \
 	origin6-fp.stderr.exp-glibc27-ppc64 \
 	overlap.stderr.exp overlap.stdout.exp overlap.vgtest \
+		overlap.stderr.exp-no_memcpy \
 	partiallydefinedeq.vgtest partiallydefinedeq.stderr.exp \
 	partiallydefinedeq.stderr.exp4 \
 	partiallydefinedeq.stderr.exp3 \
