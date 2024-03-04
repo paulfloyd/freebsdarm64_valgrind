@@ -437,6 +437,13 @@ static void restore_mcontext(ThreadState *tst, struct vki_mcontext *sc)
     * XXX: missing support for other flags.
     */
    LibVEX_GuestARM64_set_fpsr(&tst->arch.vex, sc->mc_gpregs.gp_spsr);
+   /*
+    * XXX: missing support for other flags.
+    */
+   if (sc->mc_flags & VKI_PSR_C)
+      LibVEX_GuestARM64_put_nzcv_c(1, &tst->arch.vex);
+   else
+      LibVEX_GuestARM64_put_nzcv_c(0, &tst->arch.vex);
 }
 
 static void fill_mcontext(ThreadState *tst, struct vki_mcontext *sc)
@@ -476,10 +483,8 @@ static void fill_mcontext(ThreadState *tst, struct vki_mcontext *sc)
    sc->mc_gpregs.gp_elr = tst->arch.vex.guest_PC;
    sc->mc_gpregs.gp_spsr = LibVEX_GuestARM64_get_nzcv(&tst->arch.vex);
 
-   /*
-   sc->len = sizeof(*sc);
-   VG_(memset)(sc->spare2, 0, sizeof(sc->spare2));
-   */
+   // @todo PJF ARM64 floating point
+   // https://github.com/freebsd/freebsd-src/blob/main/sys/arm64/arm64/exec_machdep.c#L511
 }
 
 // SYS_getcontext 421
@@ -501,7 +506,6 @@ PRE(sys_getcontext)
    tst = VG_(get_ThreadState)(tid);
    fill_mcontext(tst, &uc->uc_mcontext);
    uc->uc_mcontext.mc_gpregs.gp_x[0] = 0;
-   uc->uc_mcontext.mc_gpregs.gp_x[1] = 0;
    uc->uc_mcontext.mc_gpregs.gp_spsr &= ~VKI_PSR_C;
    uc->uc_sigmask = tst->sig_mask;
    VG_(memset)(uc->__spare__, 0, sizeof(uc->__spare__));

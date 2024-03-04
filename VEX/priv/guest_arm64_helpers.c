@@ -601,10 +601,10 @@ void LibVEX_GuestARM64_put_nzcv_c ( ULong new_carry_flag,
    } else {
       nzcv &= ~ARM64G_CC_MASK_C;
    }
-    vex_state->guest_CC_OP   = ARM64G_CC_OP_COPY;
-    vex_state->guest_CC_DEP1 = nzcv;
-    vex_state->guest_CC_DEP2 = 0;
-    vex_state->guest_CC_NDEP = 0;
+   vex_state->guest_CC_OP   = ARM64G_CC_OP_COPY;
+   vex_state->guest_CC_DEP1 = nzcv;
+   vex_state->guest_CC_DEP2 = 0;
+   vex_state->guest_CC_NDEP = 0;
 }
 
 #if defined(VGO_freebsd)
