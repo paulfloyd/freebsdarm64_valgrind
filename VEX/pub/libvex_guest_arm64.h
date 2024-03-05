@@ -41,7 +41,7 @@ typedef
       /* Event check fail addr and counter. */
       /* 0 */  ULong host_EvC_FAILADDR;
       /* 8 */  UInt  host_EvC_COUNTER;
-      /* 12 */ UInt  pad1;
+      /* 12 */ UInt  pad0;
       /* 16 */
       ULong guest_X0;
       ULong guest_X1;
@@ -169,10 +169,10 @@ typedef
       /* Used for FreeBSD syscall dispatching. */
       ULong guest_SC_CLASS;
       UInt guest_SETC;
-      UInt pad2;
+      UInt pad_end_0;
       /* Padding to make it have an 16-aligned size */
-      /* UInt  pad_end_0; */
-      /* ULong pad_end_1; */
+      /* UInt  pad_end_1; */
+      /* ULong pad_end_2; */
 
    }
    VexGuestARM64State;
