@@ -75,10 +75,6 @@ struct vg_sigframe {
 };
 
 struct sigframe {
-   // amd64 has retaddr, for arm64 it is in the link register
-   // I don't think that this serves any purpose
-   Addr                  retaddr;
-   Addr                  phandler; // ??
    struct vki_ucontext   uContext;
    vki_siginfo_t         sigInfo;
    // amd64 has fpstate, for arm64 it is in the ucontext
@@ -215,7 +211,6 @@ static Addr build_sigframe(ThreadState *tst,
    VG_TRACK(pre_mem_write, Vg_CoreSignal, tst->tid, "signal handler frame",
             sp, offsetof(struct sigframe, vg));
 
-   frame->retaddr = (Addr)&VG_(arm64_freebsd_SUBST_FOR_sigreturn);
 
    // on amd64 these are in the ucontext
    trapno = 0;
