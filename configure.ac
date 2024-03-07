@@ -274,22 +274,22 @@ case "${host_cpu}" in
         ;;
 
      armv8*)
-	AC_MSG_RESULT([ok (${host_cpu})])
-	VGCONF_PLATFORM_ARM_ARCH="-marm -mcpu=cortex-a8"
-	ARCH_MAX="arm"
-	;;
+        AC_MSG_RESULT([ok (${host_cpu})])
+        VGCONF_PLATFORM_ARM_ARCH="-marm -mcpu=cortex-a8"
+        ARCH_MAX="arm"
+        ;;
 
      armv7*)
-	AC_MSG_RESULT([ok (${host_cpu})])
-	VGCONF_PLATFORM_ARM_ARCH="-marm -mcpu=cortex-a8"
-	ARCH_MAX="arm"
-	;;
+        AC_MSG_RESULT([ok (${host_cpu})])
+        VGCONF_PLATFORM_ARM_ARCH="-marm -mcpu=cortex-a8"
+        ARCH_MAX="arm"
+        ;;
 
      arm*)
-	AC_MSG_RESULT([ok (${host_cpu})])
-	VGCONF_PLATFORM_ARM_ARCH="-march=armv6"
-	ARCH_MAX="arm"
-	;;
+        AC_MSG_RESULT([ok (${host_cpu})])
+        VGCONF_PLATFORM_ARM_ARCH="-march=armv6"
+        ARCH_MAX="arm"
+        ;;
 
      aarch64*)
        AC_MSG_RESULT([ok (${host_cpu})])
@@ -823,8 +823,8 @@ case "$ARCH_MAX-$VGCONF_OS" in
            VGCONF_PLATFORM_PRI_CAPS="AMD64_FREEBSD"
            VGCONF_PLATFORM_SEC_CAPS="X86_FREEBSD"
         fi
-	# These work with either base clang or ports installed gcc
-	# Hand rolled compilers probably need INSTALL_DIR/lib (at least for gcc)
+        # These work with either base clang or ports installed gcc
+        # Hand rolled compilers probably need INSTALL_DIR/lib (at least for gcc)
         if test x$is_clang = xclang ; then
            FLAG_32ON64="-B/usr/lib32"
         else
@@ -859,43 +859,43 @@ case "$ARCH_MAX-$VGCONF_OS" in
         ARCH_MAX="amd64"
         valt_load_address_sec_norml="0xUNSET"
         valt_load_address_sec_inner="0xUNSET"
-	if test x$vg_cv_only64bit = xyes; then
+        if test x$vg_cv_only64bit = xyes; then
            VGCONF_ARCH_PRI="amd64"
            VGCONF_ARCH_SEC=""
-	   VGCONF_PLATFORM_PRI_CAPS="AMD64_DARWIN"
-	   VGCONF_PLATFORM_SEC_CAPS=""
+           VGCONF_PLATFORM_PRI_CAPS="AMD64_DARWIN"
+           VGCONF_PLATFORM_SEC_CAPS=""
            valt_load_address_pri_norml="0x158000000"
            valt_load_address_pri_inner="0x138000000"
-	elif test x$vg_cv_only32bit = xyes; then
+        elif test x$vg_cv_only32bit = xyes; then
            VGCONF_ARCH_PRI="x86"
            VGCONF_ARCH_SEC=""
-	   VGCONF_PLATFORM_PRI_CAPS="X86_DARWIN"
-	   VGCONF_PLATFORM_SEC_CAPS=""
-	   VGCONF_ARCH_PRI_CAPS="x86"
+           VGCONF_PLATFORM_PRI_CAPS="X86_DARWIN"
+           VGCONF_PLATFORM_SEC_CAPS=""
+           VGCONF_ARCH_PRI_CAPS="x86"
            valt_load_address_pri_norml="0x58000000"
            valt_load_address_pri_inner="0x38000000"
-	else
+        else
            VGCONF_ARCH_PRI="amd64"
            VGCONF_ARCH_SEC="x86"
-	   VGCONF_PLATFORM_PRI_CAPS="AMD64_DARWIN"
-	   VGCONF_PLATFORM_SEC_CAPS="X86_DARWIN"
+           VGCONF_PLATFORM_PRI_CAPS="AMD64_DARWIN"
+           VGCONF_PLATFORM_SEC_CAPS="X86_DARWIN"
            valt_load_address_pri_norml="0x158000000"
            valt_load_address_pri_inner="0x138000000"
            valt_load_address_sec_norml="0x58000000"
            valt_load_address_sec_inner="0x38000000"
-	fi
+        fi
         AC_MSG_RESULT([ok (${ARCH_MAX}-${VGCONF_OS})])
-	;;
+        ;;
      arm-linux) 
-	VGCONF_ARCH_PRI="arm"
-	VGCONF_PLATFORM_PRI_CAPS="ARM_LINUX"
-	VGCONF_PLATFORM_SEC_CAPS=""
-	valt_load_address_pri_norml="0x58000000"
-	valt_load_address_pri_inner="0x38000000"
+        VGCONF_ARCH_PRI="arm"
+        VGCONF_PLATFORM_PRI_CAPS="ARM_LINUX"
+        VGCONF_PLATFORM_SEC_CAPS=""
+        valt_load_address_pri_norml="0x58000000"
+        valt_load_address_pri_inner="0x38000000"
         valt_load_address_sec_norml="0xUNSET"
         valt_load_address_sec_inner="0xUNSET"
-	AC_MSG_RESULT([ok (${host_cpu}-${host_os})])
-	;;
+        AC_MSG_RESULT([ok (${host_cpu}-${host_os})])
+        ;;
      arm64-linux)
         valt_load_address_sec_norml="0xUNSET"
         valt_load_address_sec_inner="0xUNSET"
@@ -1072,7 +1072,7 @@ AM_CONDITIONAL(VGCONF_ARCHS_INCLUDE_ARM,
                  -o x$VGCONF_PLATFORM_SEC_CAPS = xARM_LINUX )
 AM_CONDITIONAL(VGCONF_ARCHS_INCLUDE_ARM64, 
                test x$VGCONF_PLATFORM_PRI_CAPS = xARM64_LINUX \
-               -o test x$VGCONF_PLATFORM_PRI_CAPS = xARM64_FREEBSD )
+               -o x$VGCONF_PLATFORM_PRI_CAPS = xARM64_FREEBSD )
 AM_CONDITIONAL(VGCONF_ARCHS_INCLUDE_S390X,
                test x$VGCONF_PLATFORM_PRI_CAPS = xS390X_LINUX )
 AM_CONDITIONAL(VGCONF_ARCHS_INCLUDE_MIPS32,
