@@ -432,11 +432,8 @@ static void restore_mcontext(ThreadState *tst, struct vki_mcontext *sc)
    tst->arch.vex.guest_X28     = sc->mc_gpregs.gp_x[28];
    tst->arch.vex.guest_X29     = sc->mc_gpregs.gp_x[29];
    tst->arch.vex.guest_X30     = sc->mc_gpregs.gp_lr;
+   tst->arch.vex.guest_XSP     = sc->mc_gpregs.gp_sp;
    tst->arch.vex.guest_PC      = sc->mc_gpregs.gp_elr;
-   /*
-    * XXX: missing support for other flags.
-    */
-   LibVEX_GuestARM64_set_fpsr(&tst->arch.vex, sc->mc_gpregs.gp_spsr);
    /*
     * XXX: missing support for other flags.
     */
@@ -479,7 +476,7 @@ static void fill_mcontext(ThreadState *tst, struct vki_mcontext *sc)
    sc->mc_gpregs.gp_x[28] = tst->arch.vex.guest_X28;
    sc->mc_gpregs.gp_x[29] = tst->arch.vex.guest_X29;
    sc->mc_gpregs.gp_lr    = tst->arch.vex.guest_X30;
-
+   sc->mc_gpregs.gp_sp    = tst->arch.vex.guest_XSP;
    sc->mc_gpregs.gp_elr = tst->arch.vex.guest_PC;
    sc->mc_gpregs.gp_spsr = LibVEX_GuestARM64_get_nzcv(&tst->arch.vex);
 
