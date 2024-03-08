@@ -7579,7 +7579,7 @@ xyzzy10: ldr s17, xyzzy10 - 8  with  x5 = middle_of_block+0,  x6=0
   [240]  .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. 
   0000000000000000  x13      (xor, xfer intreg #1)
   0000000000000000  x23      (xor, xfer intreg #2)
-  76e0f98045156b32  v17.d[0] (xor, xfer vecreg #1)
+  76e0f98045156a32  v17.d[0] (xor, xfer vecreg #1)
   28a794c29dfbc40c  v17.d[1] (xor, xfer vecreg #1)
   0000000000000000  v18.d[0] (xor, xfer vecreg #2)
   0000000000000000  v18.d[1] (xor, xfer vecreg #2)
@@ -7609,7 +7609,7 @@ xyzzy11: ldr d17, xyzzy11 + 8  with  x5 = middle_of_block+0,  x6=0
   [240]  .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. 
   0000000000000000  x13      (xor, xfer intreg #1)
   0000000000000000  x23      (xor, xfer intreg #2)
-  07cfd3de4a8087e3  v17.d[0] (xor, xfer vecreg #1)
+  07cfd2de4a8086e3  v17.d[0] (xor, xfer vecreg #1)
   50ab1111717bfaa1  v17.d[1] (xor, xfer vecreg #1)
   0000000000000000  v18.d[0] (xor, xfer vecreg #2)
   0000000000000000  v18.d[1] (xor, xfer vecreg #2)
@@ -7639,8 +7639,8 @@ xyzzy12: ldr q17, xyzzy12 + 4  with  x5 = middle_of_block+0,  x6=0
   [240]  .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. 
   0000000000000000  x13      (xor, xfer intreg #1)
   0000000000000000  x23      (xor, xfer intreg #2)
-  04a3c72e55e713a0  v17.d[0] (xor, xfer vecreg #1)
-  67bbbee861cf4eb2  v17.d[1] (xor, xfer vecreg #1)
+  04a3c62e55e712a0  v17.d[0] (xor, xfer vecreg #1)
+  67bbbfe861cf4fb2  v17.d[1] (xor, xfer vecreg #1)
   0000000000000000  v18.d[0] (xor, xfer vecreg #2)
   0000000000000000  v18.d[1] (xor, xfer vecreg #2)
   0000000000000000  v19.d[0] (xor, xfer vecreg #3)
