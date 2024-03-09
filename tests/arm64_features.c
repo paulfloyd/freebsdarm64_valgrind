@@ -68,43 +68,108 @@ typedef int    Bool;
 #ifndef HWCAP_PMULL
 #define HWCAP_PMULL         (1 << 4)
 #endif
-
-// @todo PJF conditional all these :-(
-
+#ifndef HWCAP_SHA1
+#endif
+#ifndef HWCAP_SHA1
 #define HWCAP_SHA1          (1 << 5)
+#endif
+#ifndef HWCAP_SHA2
 #define HWCAP_SHA2          (1 << 6)
+#endif
+#ifndef HWCAP_CRC32
 #define HWCAP_CRC32         (1 << 7)
+#endif
+#ifndef HWCAP_ATOMICS
 #define HWCAP_ATOMICS       (1 << 8)
+#endif
+#ifndef HWCAP_FPHP
 #define HWCAP_FPHP          (1 << 9)
+#endif
+#ifndef HWCAP_ASIMDHP
 #define HWCAP_ASIMDHP       (1 << 10)
+#endif
+#ifndef HWCAP_CPUID
 #define HWCAP_CPUID         (1 << 11)
+#endif
+#ifndef HWCAP_ASIMDRDM
 #define HWCAP_ASIMDRDM      (1 << 12)
+#endif
+#ifndef HWCAP_JSCVT
 #define HWCAP_JSCVT         (1 << 13)
+#endif
+#ifndef HWCAP_FCMA
 #define HWCAP_FCMA          (1 << 14)
+#endif
+#ifndef HWCAP_LRCPC
 #define HWCAP_LRCPC         (1 << 15)
+#endif
+#ifndef HWCAP_DCPOP
 #define HWCAP_DCPOP         (1 << 16)
+#endif
+#ifndef HWCAP_SHA3
 #define HWCAP_SHA3          (1 << 17)
+#endif
+#ifndef HWCAP_SM3
 #define HWCAP_SM3           (1 << 18)
+#endif
+#ifndef HWCAP_SM4
 #define HWCAP_SM4           (1 << 19)
+#endif
+#ifndef HWCAP_ASIMDDP
 #define HWCAP_ASIMDDP       (1 << 20)
+#endif
+#ifndef HWCAP_SHA512
 #define HWCAP_SHA512        (1 << 21)
+#endif
+#ifndef HWCAP_SVE
 #define HWCAP_SVE           (1 << 22)
+#endif
+#ifndef HWCAP_ASIMDFHM
 #define HWCAP_ASIMDFHM      (1 << 23)
+#endif
+#ifndef HWCAP_DIT
 #define HWCAP_DIT           (1 << 24)
+#endif
+#ifndef HWCAP_USCAT
 #define HWCAP_USCAT         (1 << 25)
+#endif
+#ifndef HWCAP_ILRCPC
 #define HWCAP_ILRCPC        (1 << 26)
+#endif
+#ifndef HWCAP_FLAGM
 #define HWCAP_FLAGM         (1 << 27)
+#endif
+#ifndef HWCAP_SSBS
 #define HWCAP_SSBS          (1 << 28)
+#endif
+#ifndef HWCAP_SB
 #define HWCAP_SB            (1 << 29)
+#endif
+#ifndef HWCAP_PACA
 #define HWCAP_PACA          (1 << 30)
+#endif
+#ifndef HWCAP_PACG
 #define HWCAP_PACG          (1UL << 31)
+#endif
 
+#ifndef HWCAP2_DCPODP
 #define HWCAP2_DCPODP       (1 << 0)
+#endif
+#ifndef HWCAP2_SVE2
 #define HWCAP2_SVE2         (1 << 1)
+#endif
+#ifndef HWCAP2_SVEAES
 #define HWCAP2_SVEAES       (1 << 2)
+#endif
+#ifndef HWCAP2_SVEPMULL
 #define HWCAP2_SVEPMULL     (1 << 3)
+#endif
+#ifndef HWCAP2_SVEBITPERM
 #define HWCAP2_SVEBITPERM   (1 << 4)
+#endif
+#ifndef HWCAP2_SVESHA3
 #define HWCAP2_SVESHA3      (1 << 5)
+#endif
 #ifndef HWCAP2_SVESM4
 #define HWCAP2_SVESM4       (1 << 6)
 #endif

@@ -127,6 +127,9 @@ struct vki_fpregs {
         int          fp_pad;
 };
 
+/* amd64 compatibility */
+#define vki_fpreg vki_fpregs
+
 /* fpregs in FreeBSD headers fpreg */
 //#define vki_fpreg vki_fpregs
 
