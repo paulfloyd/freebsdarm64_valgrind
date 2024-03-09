@@ -1021,10 +1021,9 @@ POST(sys_procctl)
 // int mknodat(int fd, const char *path, mode_t mode, dev_t dev);
 PRE(sys_mknodat)
 {
-   // @todo PJF ARM64 vki_mode_t to unsigned int
    PRINT("sys_mknodat ( %" FMT_REGWORD "u, %#" FMT_REGWORD "x(%s), 0x%" FMT_REGWORD "x, 0x%" FMT_REGWORD "x )", ARG1,ARG2,(char*)ARG2,ARG3,ARG4 );
    PRE_REG_READ4(long, "mknodat",
-                 int, fd, const char *, path, unsigned int, mode, vki_dev_t, dev);
+                 int, fd, const char *, path, vki_mode_t, mode, vki_dev_t, dev);
    PRE_MEM_RASCIIZ( "mknodat(pathname)", ARG2 );
 }
 

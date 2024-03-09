@@ -2574,6 +2574,38 @@ struct vki_ps_strings {
 #define VKI_NT_FREEBSD_FCTL_STKGAP_DISABLE 0x00000004
 #define VKI_NT_FREEBSD_FCTL_WXNEEDED 0x00000008
 
+
+/*
+ * PJF this is a bit messy
+ *
+ * mode_t is uint16_t
+ * No problem on x86/amd64
+ * On arm64 there are syscalls that take mode_t but that doesn't
+ * work with memcheck validation - arm64 doesn't have any 16bit
+ * registers.
+ *
+ * I can't just change mode_t to be 32bit. that will mess up
+ * the 'stat' structures in thie file.
+ *
+ * Instead I'll just do what the compiler does, and promote
+ * it to 32bits.
+ *
+ * In the kernel, the syscall interface just pushes all
+ * possible syscall args onto the stack and then
+ * memcpy's them into an array of register sized args.
+ * There's a struct defined for each syscall's arguments
+ * that uses padding to type pun the values back to
+ * the type passed in from userland. The structs are
+ * generated from the syscall table.
+ *
+ * vki_mode_t is only used in syswrap files so there shouldn't
+ * be any other side effects.
+ */
+
+#if defined(VGP_arm64_freebsd)
+#define vki_mode_t vki_int32_t
+#endif
+
 // See syswrap-freebsd.c PRE/POST(sys_ioctl)
 #if 0
 
