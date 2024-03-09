@@ -641,11 +641,11 @@ PRE(sys_ptrace)
       break;
 
    case VKI_PTRACE_GETFPREGS:
-      PRE_MEM_WRITE("ptrace", ARG3, sizeof(struct vki_fpregs));
+      PRE_MEM_WRITE("ptrace", ARG3, sizeof(struct vki_fpreg));
       break;
 
    case VKI_PTRACE_SETFPREGS:
-      PRE_MEM_READ("ptrace", ARG3, sizeof(struct vki_fpregs));
+      PRE_MEM_READ("ptrace", ARG3, sizeof(struct vki_fpreg));
       break;
 
    case VKI_PTRACE_GETDBREGS:
@@ -727,7 +727,7 @@ POST(sys_ptrace)
 
    case VKI_PTRACE_GETFPREGS:
       if ((Word)RES != -1) {
-         POST_MEM_WRITE(ARG3, sizeof(struct vki_fpregs));
+         POST_MEM_WRITE(ARG3, sizeof(struct vki_fpreg));
       }
       break;
 
