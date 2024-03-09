@@ -6725,9 +6725,6 @@ POST(sys___sysctlbyname)
 //               _In_z_ const char *name);
 PRE(sys_shm_open2)
 {
-   // @todo PJF ARM64 I had to change vki_mode_t mode to unsigned int because
-   // otherwise there is an assert in get_otrack_shadow_offset_wrk (mc_machine.c:1125)
-   // because it doesn't handle 2 byte offsets
    PRE_REG_READ5(int, "shm_open2",
                  const char *, path, int, flags, vki_mode_t, mode, int, shmflags, const char*, name);
    if (ARG1 == VKI_SHM_ANON) {
