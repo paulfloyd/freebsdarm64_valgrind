@@ -7,6 +7,7 @@ EXTRA_DIST = \
         crc32.stdout.exp crc32.stderr.exp crc32.vgtest \
         cvtf_imm.stdout.exp cvtf_imm.stderr.exp cvtf_imm.vgtest \
 	fp_and_simd.stdout.exp fp_and_simd.stderr.exp fp_and_simd.vgtest \
+		fp_and_simd.stdout.exp-freebsd \
 	integer.stdout.exp integer.stderr.exp integer.vgtest \
 	memory.stdout.exp memory.stderr.exp memory.vgtest \
 		memory.stdout.exp-clang \
