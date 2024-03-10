@@ -9,6 +9,7 @@ EXTRA_DIST = \
 	fp_and_simd.stdout.exp fp_and_simd.stderr.exp fp_and_simd.vgtest \
 	integer.stdout.exp integer.stderr.exp integer.vgtest \
 	memory.stdout.exp memory.stderr.exp memory.vgtest \
+		memory.stdout.exp-clang \
 	atomics_v81.stdout.exp atomics_v81.stderr.exp atomics_v81.vgtest \
 	simd_v81.stdout.exp simd_v81.stderr.exp simd_v81.vgtest \
 	simd_dotprod.stdout.exp simd_dotprod.stderr.exp simd_dotprod.vgtest \
