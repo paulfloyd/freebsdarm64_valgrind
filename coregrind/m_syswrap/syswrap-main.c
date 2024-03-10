@@ -351,7 +351,7 @@ void do_syscall_for_client ( Int syscallno,
    vki_sigset_t saved;
    UWord err;
 #  if defined(VGO_freebsd)
-   Int real_syscallno;
+   Word real_syscallno;
 #  endif
 #  if defined(VGO_linux)
    err = ML_(do_syscall_for_client_WRK)(

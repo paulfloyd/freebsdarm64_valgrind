@@ -523,9 +523,9 @@ static UInt local_sys_getpid ( void )
 
 // @todo PJF ARM64 try to get this to work with both clang and gcc
 #if defined(__clang__)
-static UInt local_sys_write_stderr ( const HChar* buf, Int n )
+static UInt local_sys_write_stderr ( const HChar* buf, SizeT n )
 {
-   volatile UInt res;
+   volatile ULong res;
    __asm__ volatile (
       "mov  x0, #2\n\t"     /* stderr */
       "mov  x1, %[buf]\n\t" /* buf */
@@ -538,21 +538,21 @@ static UInt local_sys_write_stderr ( const HChar* buf, Int n )
       "mov  %[result], x0\n" /* res = x0 */
       : [result] "=X" (res)
       : [buf] "X" (buf), [n] "X" (n)
-      : "x0","x1","x2","x7", "cc"
+      : "x0","x1","x2","x7", "x8", "cc"
       );
    return res;
 }
 
 static UInt local_sys_getpid ( void )
 {
-   UInt res;
+   ULong res;
    __asm__ volatile (
       "mov x8, #"VG_STRINGIFY(__NR_getpid)"\n\t"
       "svc 0x0\n\t"             /* getpid() */
       "mov %[result], x0\n\t"    /* set __res = x0 */
       : [result] "=X" (res)
       :
-      : "x8", "x0", "cc" );
+      : "x8", "x0", "x1", "cc" );
    return res;
 }
 #else
@@ -566,8 +566,8 @@ static UInt local_sys_write_stderr ( const HChar* buf, Int n )
       "ldr  x1, [%0]\n\t"      /* buf */
       "ldr  x2, [%0, #8]\n\t"  /* n */
       "mov  x8, #"VG_STRINGIFY(__NR_write)"\n\t"
-                                            "svc  0x0\n"          /* write() */
-                                            "str  x0, [%0]\n\t"
+      "svc  0x0\n"          /* write() */
+      "str  x0, [%0]\n\t"
       :
       : "r" (block)
       : "x0","x1","x2","x7"

@@ -795,28 +795,35 @@ asm(
 
 #elif defined(VGP_arm64_freebsd)
 
+/*
+ * Arguments a1 to a8 are in registers x0 to x7.
+ * Which is just what we want for a syscall.
+ *
+ * The syscall number is on the top of the stack
+ * pointed to by sp. The flags are at sp+8 and
+ * second return value at sp+16.
+ */
+
 extern UWord do_syscall_WRK (
-   UWord syscall_no,
    UWord a1, UWord a2, UWord a3,
    UWord a4, UWord a5, UWord a6,
    UWord a7, UWord a8,
+   UWord syscall_no,
    UInt *flags,  UWord *rv2
    );
 asm(
    ".text\n"
    ".globl do_syscall_WRK\n"
    "do_syscall_WRK:\n"
-    "        ldr     x8, [sp, #8]     \n"  /* assume syscall success */
-    "        str     xzr, [x8]        \n"
-    "        ldr     x8, [sp, #0]     \n"  /* load syscall_no */
-    "        svc     0x0              \n"
-    "        bcc     1f               \n"  /* jump if success */
-    "        ldr     x9, [sp, #8]     \n"  /* syscall failed - set *errflag */
-    "        mov     x10, #1          \n"
-    "        str     x10, [x9]        \n"
-    "    1:  ldr     x9, [sp, #16]    \n"  /* save 2nd result word */
-    "        str     x1, [x9]         \n"
-    "        ret                      \n"  /* return 1st result word */
+   "        ldr  x8, [sp]\n"          // retrieve syscall_no, put it in x8
+   "        svc  0x0\n"               // do the syscall
+   "        mov  x9, 1\n"             // flags for error will be 1 or 0
+   "        csel x9, x9, xzr, cs\n"   // conditionally select 1 or 0 into x9
+   "        ldr  x10, [sp, #8]\n"     // load the address of flags
+   "        str  w9, [x10]\n"         // store flags result
+   "        ldr  x10, [sp, #16]\n"    // load the addres of rv2
+   "        str  x1, [x10]\n"         // store rv2 result
+   "        ret\n"
    ".previous\n"
    );
 
@@ -1195,8 +1202,8 @@ SysRes VG_(do_syscall) ( UWord sysno, RegWord a1, RegWord a2, RegWord a3,
    UWord val;
    UWord val2 = 0;
    UInt err = 0;
-   val = do_syscall_WRK(sysno, a1, a2, a3, a4, a5,
-                        a6, a7, a8, &err, &val2);
+   val = do_syscall_WRK(a1, a2, a3, a4, a5,
+                        a6, a7, a8, sysno, &err, &val2);
    return VG_(mk_SysRes_arm64_freebsd)( val, val2, (err & 1) != 0 ? True : False);
 
 #  elif defined(VGP_ppc32_linux)

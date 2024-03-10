@@ -135,6 +135,7 @@ ML_(do_syscall_for_client_WRK):
    ldr x1, [sp, #24] /* saved x3 == postmask */
    mov x2, #0
    ldr x3, [sp, #32] /* saved x4 == nsigwords */
+   cmn     xzr, xzr /* clear the carry flag */
    svc 0x00000000
 
    blt 7f
