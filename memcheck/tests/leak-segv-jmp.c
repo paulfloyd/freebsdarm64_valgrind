@@ -109,7 +109,23 @@ asm(
 ".previous\n"
 );
 
-
+#elif defined(VGP_arm64_linux)
+extern UWord do_syscall_WRK (
+          UWord a1, UWord a2, UWord a3,
+          UWord a4, UWord a5, UWord a6,
+          UWord syscall_no
+       );
+asm(
+".text\n"
+".globl do_syscall_WRK\n"
+"do_syscall_WRK:\n"
+"        mov x8, x6\n"
+"        mov x6, 0\n"
+"        mov x7, 0\n"
+"        svc 0\n"
+"        ret\n"
+".previous\n"
+);
 
 #elif defined(VGP_s390x_linux)
 UWord do_syscall_WRK (
