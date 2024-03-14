@@ -103,8 +103,7 @@ typedef
       Int o_arg6;
       Int uu_arg7;
       Int uu_arg8;
-#     elif defined(VGP_ppc64be_linux) || defined(VGP_ppc64le_linux) \
-           || defined(VGP_arm64_freebsd)
+#     elif defined(VGP_ppc64be_linux) || defined(VGP_ppc64le_linux)
       Int o_arg1;
       Int o_arg2;
       Int o_arg3;
@@ -112,7 +111,7 @@ typedef
       Int o_arg5;
       Int o_arg6;
       Int o_arg7;
-      Int o_arg8;
+      Int uu_arg8;
 #     elif defined(VGP_x86_freebsd)
       Int s_arg1;
       Int s_arg2;
@@ -138,6 +137,15 @@ typedef
       Int s_arg7;
       Int s_arg8;
       Bool arg6_is_reg;
+#     elif defined(VGP_arm64_freebsd)
+      Int o_arg1;
+      Int o_arg2;
+      Int o_arg3;
+      Int o_arg4;
+      Int o_arg5;
+      Int o_arg6;
+      Int o_arg7;
+      Int o_arg8;
 #     elif defined(VGP_mips32_linux)
       Int o_arg1;
       Int o_arg2;
