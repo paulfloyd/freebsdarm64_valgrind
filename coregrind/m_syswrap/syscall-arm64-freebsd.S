@@ -32,7 +32,6 @@
 
 #include "pub_core_vkiscnums_asm.h"
 #include "libvex_guest_offsets.h"
-      
 
 /*----------------------------------------------------------------*/
 /*
@@ -90,7 +89,7 @@ ML_(do_syscall_for_client_WRK):
 1:
 
    mov x8, #__NR_sigprocmask
-   mov x0, #VKI_SIG_SETMASK 
+   mov x0, #VKI_SIG_SETMASK
    mov x1, x2 /* sysmask */
    mov x2, x3 /* postmask */
    mov x3, x4 /* nsigwords */
@@ -131,7 +130,7 @@ ML_(do_syscall_for_client_WRK):
 
 4:
    mov x8, #__NR_sigprocmask
-   mov x0, #VKI_SIG_SETMASK 
+   mov x0, #VKI_SIG_SETMASK
    ldr x1, [sp, #24] /* saved x3 == postmask */
    mov x2, #0
    ldr x3, [sp, #32] /* saved x4 == nsigwords */
@@ -152,7 +151,7 @@ ML_(do_syscall_for_client_WRK):
    ldp  x27, x28, [sp], #16
    ldp  x29, x30, [sp], #16
    ret
-        
+
 7: /* Failure: return 0x8000 | error code */
    orr  x0, x0, #0x8000
    ldp  xzr, x1,  [sp], #16
@@ -189,7 +188,7 @@ ML_(blksys_finished):   .quad 5b
 
 /* Let the linker know we don't need an executable stack */
 MARK_STACK_NO_EXEC
-   
+
 /*--------------------------------------------------------------------*/
 /*--- end                                                          ---*/
 /*--------------------------------------------------------------------*/

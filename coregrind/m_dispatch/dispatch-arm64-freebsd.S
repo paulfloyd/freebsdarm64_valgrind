@@ -50,7 +50,7 @@
 
 /* signature:
 void VG_(disp_run_translations)( UWord* two_words,
-                                 void*  guest_state, 
+                                 void*  guest_state,
                                  Addr   host_addr );
 */
 .text
@@ -77,7 +77,7 @@ VG_(disp_run_translations):
         // mov  r4, #0
         // fmxr fpscr, r4
 
-       	/* Set up the guest state pointer */
+        /* Set up the guest state pointer */
         mov x21, x1
 
         /* and jump into the code cache.  Chained translations in
@@ -87,7 +87,7 @@ VG_(disp_run_translations):
            VG_(cp_...) below. */
         br x2
         /* NOTREACHED */
-        
+
 /*----------------------------------------------------*/
 /*--- Postamble and exit.                          ---*/
 /*----------------------------------------------------*/
@@ -299,7 +299,7 @@ VG_(disp_cp_xassisted):
 /* ------ Event check failed ------ */
 .global VG_(disp_cp_evcheck_fail)
 VG_(disp_cp_evcheck_fail):
-       	mov  x1, #VG_TRC_INNER_COUNTERZERO
+        mov  x1, #VG_TRC_INNER_COUNTERZERO
         mov  x2, #0
 	b    postamble
 
