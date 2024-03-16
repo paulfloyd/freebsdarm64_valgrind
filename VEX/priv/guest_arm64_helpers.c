@@ -1794,7 +1794,7 @@ IRExpr* guest_arm64_spechelper ( const HChar* function_name,
 //ZZ }
 //ZZ #endif
 
-/* non-zero zero carry v? */
+/* negative zero carry o-v-erflow flags */
 /* VISIBLE TO LIBVEX CLIENT */
 ULong LibVEX_GuestARM64_get_nzcv ( /*IN*/const VexGuestARM64State* vex_state )
 {

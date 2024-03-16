@@ -516,7 +516,6 @@ static UInt local_sys_getpid ( void )
       :
       : "rax", "rcx");//, "r11" );
    return __res;
-
 }
 
 #elif defined(VGP_arm64_freebsd)

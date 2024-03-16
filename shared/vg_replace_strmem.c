@@ -1163,7 +1163,6 @@ static inline void my_exit ( int x )
  MEMCPY(NONE, ZuintelZufastZumemcpy)
 
 #elif defined(VGO_freebsd)
-
  MEMCPY(VG_Z_LIBC_SONAME,  memcpy)
  MEMCPY(VG_Z_LD_ELF_SO_1, memcpy)
  MEMCPY(VG_Z_LD_ELF32_SO_1, memcpy)
