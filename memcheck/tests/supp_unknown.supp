@@ -4,9 +4,4 @@
    Memcheck:Jump
    obj:*
 }
-{
-   FreeBSD arm64
-   Memcheck:Jump
-   obj:*
-}
 
