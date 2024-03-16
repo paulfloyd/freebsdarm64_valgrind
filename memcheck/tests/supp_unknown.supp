@@ -20,4 +20,9 @@
    fun:_*_start1
    fun:(below main)
 }
+{
+   FreeBSD arm64
+   Memcheck:Jump
+   obj:*
+}
 
