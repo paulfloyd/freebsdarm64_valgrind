@@ -4986,7 +4986,9 @@ AC_CHECK_FUNCS([     \
         close_range  \
         wcsncpy      \
         free_aligned_sized \
-	sbrk
+	sbrk         \
+        wcpncpy      \
+        wcsxfrm
         ])
 
 # AC_CHECK_LIB adds any library found to the variable LIBS, and links these
@@ -5028,6 +5030,10 @@ AM_CONDITIONAL([HAVE_FREE_ALIGNED_SIZED],
                [test x$ac_cv_func_free_aligned_sized = xyes])
 AM_CONDITIONAL([HAVE_SBRK],
                [test x$ac_cv_func_sbrk = xyes])
+AM_CONDITIONAL([HAVE_WCPNCPY],
+               [test x$ac_cv_func_wcpncpy = xyes])
+AM_CONDITIONAL([HAVE_WCSXFRM],
+               [test x$ac_cv_func_wcsxfrm = xyes])
 
 if test x$VGCONF_PLATFORM_PRI_CAPS = xMIPS32_LINUX \
      -o x$VGCONF_PLATFORM_PRI_CAPS = xMIPS64_LINUX \
